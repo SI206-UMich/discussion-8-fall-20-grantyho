@@ -5,21 +5,34 @@ import unittest
 # Task 2: Get the URL that links to list of Nobel Prize Winners
 # HINT: You will have to add https://en.wikipedia.org to the URL retrieved using BeautifulSoup
 def getLink(soup):
-    
-    pass
+    nobel = soup.find('a', {'href':'/wiki/List_of_Nobel_laureates_by_university_affiliation'})
+    nobel = nobel.get('href')
+    link = "https://en.wikipedia.org" + str(nobel)
+    return link
+
+   
 
 # Task 3: Get the details from the box titled "College/school founding". Get all the college/school names and the year they were
 # founded and organize the same into key-value pairs.
 def getAdmissionsInfo2019(soup):
+    founding = soup.find('table', class_ = 'toccolours')
+    schools = founding.find_all('tr')
+    
+    d = {}
 
-    pass
+    for x in schools[3:]:
+        td_tags = x.find_all('td')
+        d[td_tags[0].text] = td_tags[1].text.rstrip()
 
+    return d
 
 
 def main():
     # Task 1: Create a BeautifulSoup object and name it soup. Refer to discussion slides or lecture slides to complete this
 
     #### YOUR CODE HERE####
+    html_doc = requests.get('https://en.wikipedia.org/wiki/University_of_Michigan').text
+    soup = BeautifulSoup(html_doc, 'html.parser')
 
     #Call the functions getLink(soup) and getAdmissionsInfo2019(soup) on your soup object.
     getLink(soup)
